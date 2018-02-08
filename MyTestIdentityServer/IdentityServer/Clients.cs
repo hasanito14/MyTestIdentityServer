@@ -1,8 +1,5 @@
-﻿using System;
+﻿using IdentityServer3.Core.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using IdentityServer3.Core.Models;
 
 namespace MyTestIdentityServer.IdentityServer
 {
@@ -21,6 +18,8 @@ namespace MyTestIdentityServer.IdentityServer
 
                     RedirectUris = new List<string>
                     { "https://localhost:44376/" },
+                    PostLogoutRedirectUris = new List<string>
+                    {  "https://localhost:44376/"},
 
                     AllowAccessToAllScopes = true
                 }

@@ -21,8 +21,8 @@ namespace MyTestIdentityServer.IdentityServer
                     {
                         new Claim(Constants.ClaimTypes.GivenName, "Test"),
                         new Claim(Constants.ClaimTypes.FamilyName, "User"),
-                        new Claim(Constants.ClaimTypes.Role, "Test1"),
-                        new Claim(Constants.ClaimTypes.Role, "Test2")
+                        new Claim(Constants.ClaimTypes.Role, "Read"),
+                        new Claim(Constants.ClaimTypes.Role, "Write")
                     }
                 }
             };

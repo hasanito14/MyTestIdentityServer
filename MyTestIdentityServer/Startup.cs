@@ -1,5 +1,6 @@
 ﻿using IdentityServer3.Core;
 using IdentityServer3.Core.Configuration;
+using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
@@ -42,6 +43,9 @@ namespace MyTestIdentityServer
                 AuthenticationType = "Cookies"
             });
 
+
+            app.UseResourceAuthorization(new AuthorizationManager());
+
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
                 Authority = "https://localhost:44376/identity",
@@ -81,7 +85,25 @@ namespace MyTestIdentityServer
                         nid.AddClaim(sub);
                         nid.AddClaims(roles);
 
+                        // keep the id_token for logout
+                        nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
+
                         n.AuthenticationTicket = new AuthenticationTicket(nid, n.AuthenticationTicket.Properties);
+
+                        return Task.FromResult(0);
+                    },
+
+                    RedirectToIdentityProvider = n =>
+                    {
+                        if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
+                        {
+                            var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
+
+                            if (idTokenHint != null)
+                            {
+                                n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
+                            }
+                        }
 
                         return Task.FromResult(0);
                     }
