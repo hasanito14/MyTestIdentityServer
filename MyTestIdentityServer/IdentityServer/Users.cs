@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Web;
-using IdentityServer3.Core;
+﻿using IdentityServer3.Core;
 using IdentityServer3.Core.Services.InMemory;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace MyTestIdentityServer.IdentityServer
 {
@@ -23,7 +20,9 @@ namespace MyTestIdentityServer.IdentityServer
                     Claims = new[]
                     {
                         new Claim(Constants.ClaimTypes.GivenName, "Test"),
-                        new Claim(Constants.ClaimTypes.FamilyName, "User")
+                        new Claim(Constants.ClaimTypes.FamilyName, "User"),
+                        new Claim(Constants.ClaimTypes.Role, "Test1"),
+                        new Claim(Constants.ClaimTypes.Role, "Test2")
                     }
                 }
             };
