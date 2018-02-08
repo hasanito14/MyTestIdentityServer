@@ -3,6 +3,7 @@ using IdentityServer3.Core.Configuration;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OpenIdConnect;
 using MyTestIdentityServer.IdentityServer;
 using Owin;
@@ -18,6 +19,19 @@ namespace MyTestIdentityServer
 {
     public class Startup
     {
+        private void ConfigureIdentityProviders(IAppBuilder app, string signInAsType)
+        {
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions
+            {
+                AuthenticationType = "Google",
+                Caption = "Sign-in with Google",
+                SignInAsAuthenticationType = signInAsType,
+
+                ClientId = "946323929359-e1jcp5dch5ce2mf3s4vr1fhkla03h385.apps.googleusercontent.com",
+                ClientSecret = "sr9WqhlvCF6mJgJCy7_lrQER"
+            });
+        }
+
         public void Configuration(IAppBuilder app)
         {
             AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
@@ -34,7 +48,14 @@ namespace MyTestIdentityServer
                     Factory = new IdentityServerServiceFactory()
                     .UseInMemoryUsers(Users.Get())
                     .UseInMemoryClients(Clients.Get())
-                    .UseInMemoryScopes(Scopes.Get())
+                    .UseInMemoryScopes(Scopes.Get()),
+
+                    //For Google Authentication
+
+                    AuthenticationOptions = new IdentityServer3.Core.Configuration.AuthenticationOptions
+                    {
+                        IdentityProviders = ConfigureIdentityProviders
+                    }
                 });
             });
 
